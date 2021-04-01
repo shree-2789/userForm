@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Enquiry Form</title>
+    <style>
+        #form2{
+            display: none;
+        }         
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+    <div class="container">
+      <div class="row">
+          <div class="col">
+          <h1 class="text-center bg-secondary">
+              This User Form
+          </h1>
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-8">
+            <form action="form.html" onsubmit="return verifid()" id="form2">
+                <div class="form-group row">
+                    <label for="" class="col-sm-4 col-form-label">Enter Code for Verification :</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="votp">
+                    </div>
+                </div>
+                <div class="form-group row" style="display: none;">
+                  <input type="text" class="form-control" id="otpg" >
+                </div>
+                <div class="form-group row">
+                  <button class="btn btn-info btn-block" id="btn1">Verifi</button>
+              </div>
+            </form>  
+          </div>
+          <div class="col-sm-2">
+              Fname:<span id="fname"></span>
+              Phone:<span id="phone"></span>
+          </div>
+      </div>
+      
+    </div>
+</div>
+<script>
+    var otp=Number;
+    var count=0;
+    var votp=document.getElementById("votp");
+    window.addEventListener('load',()=>{
+        const params=(new URL(document.location)).searchParams;
+        const fname=params.get('fname');
+        const lname=params.get('lname');
+        const email=params.get('email');
+        const phone=params.get('phone');
+        
+        // document.getElementById("fname").innerHTML=fname;
+        // document.getElementById("phone").innerHTML=phone;
+        if(fname=="" && phone==""){
+            window.location.replace("./form.html");
+                      
+        }else{
+            otp=Math.floor(1000+Math.random()*9000);
+            document.getElementById("otpg").value=otp;
+            if(confirm("<pre>Dear "+fname+"</pre>Thannk you for enquiry. A "+otp+" verification number has been send to your phone number : "+phone+" Please Enter in the following box and submit for confirmation.")){
+                document.getElementById("form2").style.display="block";
+            }else{
+                window.location.replace("./form.html");
+            }
+        }
+    });
+    
+    function verifid(){
+        var check=/^[0-9]{4}$/;
+        if(!check.test(votp.value)){
+            alert("Please Enter valid OTP.");
+            votp.focus();
+            votp.className="form-control is-invalid";
+            count++;
+            return false;                        
+        }else{
+            if(votp.value==otp){
+                alert("Verification Successfully.");
+                return true;
+                
+            }else if(count=='3'){
+                // alert("Grater Than 3");
+                window.location.replace("./pageNotFound.html");
+                return false;
+            }else{
+                alert("Please Enter valid OTP.");
+                votp.focus();
+                votp.className="form-control is-invalid";
+                count++;
+                return false;
+            }           
+        
+        }
+    }
+</script>
+</body>
+</html>
